@@ -20,10 +20,10 @@
 				    </a>	
 				  </div>
 				  <div class="col-md-4">
-				  	<div class="title"><a href="#">${blog.getTitle()}</a></div>
-				  	<div class="date"> ${blog.getUpdated_at()} | Author: <a href="listUserPost.html">${blog.getUser().getUsername()}</a></div>
+				  	<div class="title"><a href="#">${blog.title}</a></div>
+				  	<div class="date"> ${blog.updated_at} | Author: <a href="listUserPost.html">${blog.user.username}</a></div>
 				  	<div class="description">
-				  		${blog.getDescription()}
+				  		${blog.description}
 				  	</div>
 				  </div>
 				  <c:forEach var="blog2" items="${listTopBlogs}" begin="${counter.count*2-1}" end="${counter.count*2-1}">
@@ -33,10 +33,10 @@
 				    </a>	
 				  </div>
 				  <div class="col-md-4">
-				  	<div class="title"><a href="#">${blog2.getTitle()}</a></div>
-				  	<div class="date"> ${blog2.getUpdated_at()} | Author: <a href="listUserPost.html">${blog2.getUser().getUsername()}</a></div>
+				  	<div class="title"><a href="#">${blog2.title}</a></div>
+				  	<div class="date"> ${blog2.updated_at} | Author: <a href="listUserPost.html">${blog2.user.username}</a></div>
 				  	<div class="description">
-				  		${blog2.getDescription()}
+				  		${blog2.description}
 				  	</div>
 				  </div>
 				  </c:forEach> 
