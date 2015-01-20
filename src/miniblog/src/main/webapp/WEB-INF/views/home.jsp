@@ -4,66 +4,8 @@
 <%@ page session="true" %>
 
 <html>
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<title>Home</title>
-	
-	<link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">
-	<script src="<c:url value="/resources/js/jquery.js" />"></script>
-	<script src="<c:url value="/resources/js/bootstrap.js" />"></script>
-</head>
-<body>
-<div class="container-fluid" style="background-color: #28AAE0;border-color: #28AAE0;">
-		<div class="container">
-				<div class="navbar-header col-md-3">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="glyphicon glyphicon-align-justify" style="color:#fff"></span>
-					</button>
-					<a class="logo" href="${pageContext.request.contextPath}/">Mini Blog</a>
-				</div>
-				<div class="col-md-5" style="margin-top: 8px;">
-					<form role="form" action="searchUser.html">
-						
-					<div class="input-group">
-						<input name="word" class="form-control txtSearch"  placeholder="Firstname, Lastname, Username" type="text">
-						<span class="input-group-btn">
-							<input class="btn btn-primary" value="Search" type="submit">
-						</span>
-		
-					</div><!-- /input-group -->
-			
-					</form>
-				</div>
-				<div id="navbar" class="navbar-collapse collapse col-md-4">
-	
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="list-all-posts.html">Blog</a></li>
-						<c:choose>
-   						<c:when test="${empty sessionScope.user_loged_in}" >
-   							<%  %>
-   							<li><a href="${pageContext.request.contextPath}/login">Login</a></li>
-  						</c:when>
-   
-   						<c:otherwise>
-   						Hello, ${sessionScope.user_loged_in}
-   						<li class="dropdown active">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">My Account<span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="${pageContext.request.contextPath}/edit/${sessionScope.user_loged_in}">Update Info</a></li>
-								<li><a href="change-password.html">Change Password</a></li>
-								<li><a href="manage-post.html">Manage Post</a></li>
-								<li><a href="${pageContext.request.contextPath}/logout">Log out</a></li>
-							</ul>
-						</li>
-   						</c:otherwise>
-						</c:choose>
-					</ul>
-				</div>
-		</div>
-	</div>
+<%@ include file="header.jsp" %>
+
 	<div class="clearfix"></div>
 	<div class="container">
 		<div class="row" style="margin-top:10px;">
@@ -74,7 +16,7 @@
 				 <div class="row">
 				  <div class="col-md-2">
 				    <a href="#">
-				     <img data-holder-rendered="true" src="${blog.getImage()}" style="" class="img-responsive" alt="">
+				     <img data-holder-rendered="true" src="${blog.image}" style="" class="img-responsive" alt="">
 				    </a>	
 				  </div>
 				  <div class="col-md-4">
@@ -87,7 +29,7 @@
 				  <c:forEach var="blog2" items="${listTopBlogs}" begin="${counter.count*2-1}" end="${counter.count*2-1}">
 				  <div class="col-md-2">
 				    <a href="#">
-				     <img data-holder-rendered="true" src="${blog2.getImage()}" style="" class="img-responsive" alt="">
+				     <img data-holder-rendered="true" src="${blog2.image}" style="" class="img-responsive" alt="">
 				    </a>	
 				  </div>
 				  <div class="col-md-4">
