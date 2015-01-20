@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="true" %>
 
-<html>
+
 <%@ include file="header.jsp" %>
 
 	<div class="clearfix"></div>
@@ -49,6 +49,4 @@
 			<!--End Content-->
 		</div>
 	</div>
-</body>
-</body>
-</html>
+<%@ include file="footer.jsp" %>
