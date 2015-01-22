@@ -8,6 +8,31 @@
 	<link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">
 	<script src="<c:url value="/resources/js/jquery.js" />"></script>
 	<script src="<c:url value="/resources/js/bootstrap.js" />"></script>
+	<script>
+	function handlerInputFileChange(input) {
+		if (input.files && input.files[0]) {
+			var fileSize = input.files[0];
+		    var sizeInMb = fileSize.size;
+		    var sizeLimit= 5000000;
+		    if (sizeInMb < sizeLimit) {
+		    	
+		    	var reader = new FileReader();
+
+				reader.onload = function (e) {
+					$('#image-upload')
+					.attr('src', e.target.result);
+					
+				};
+				
+				reader.readAsDataURL(input.files[0]);
+		    }else{
+		    	alert("Image size should be less than 5000000 byte");
+		    }
+			
+		}
+	}
+	
+</script>
 </head>
 <body>
 <div class="container-fluid" style="background-color: #28AAE0;border-color: #28AAE0;">

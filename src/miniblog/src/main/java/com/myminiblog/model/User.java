@@ -30,6 +30,8 @@ public class User {
     private String address;
 	@Column (nullable=true, name="email")
     private String email;
+	@Column (nullable=true, name="image")
+    private String image;
 	@Column (nullable=false, name="status")
     private int status;
 	@Column (nullable=false, name="created_at")
@@ -102,6 +104,15 @@ public class User {
     public void setEmail(String _email) {
         this.email = _email;
     }
+    
+    public String getImage() {
+        return image;
+    }
+ 
+    public void setImage(String _image) {
+        this.image = _image;
+    }
+    
     public int getStatus() {
         return status;
     }
