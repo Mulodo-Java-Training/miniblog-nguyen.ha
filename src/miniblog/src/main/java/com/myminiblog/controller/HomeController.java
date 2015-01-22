@@ -150,7 +150,7 @@ public class HomeController {
         	user.setLastname(p.getLastname());
             this.userService.updateUser(user);
             model.addAttribute("userinfo",user);
-            model.addAttribute("error","fasle");
+            model.addAttribute("error","false");
         }
          
         return "updateUserInfo";

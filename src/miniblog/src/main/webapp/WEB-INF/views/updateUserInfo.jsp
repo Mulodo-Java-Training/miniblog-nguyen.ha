@@ -5,20 +5,21 @@
 
 <%@ include file="header.jsp" %>
 	<div class="clearfix"></div>
+
 	<div class="container">
 		<div class="row" style="margin-top:10px;">
 			<ol class="breadcrumb">
 				<li><a href="${pageContext.request.contextPath}/">Home</a></li>
-				<li><a href="#">My Account</a></li>
+				<li><a href="${pageContext.request.contextPath}/edit/${sessionScope.user_loged_in}">My Account</a></li>
 				<li class="active">Update User's Information</li>
 			</ol>
 
 			<!--Content-->
-			<div class="container-fluid" style="padding-top:15px;padding-bottom:20px">
-				<c:if test="${!empty error}">
+				<div class="container-fluid" style="padding-top:15px;padding-bottom:20px">
 				
+				<c:if test="${!empty error}">
 					<c:choose>
-   						<c:when test="${error}==false" >
+   						<c:when test="${error == 'false'}" >
    							<div class="alert alert-success" role="alert" style="margin-top:5px;">
 							<button type="button" class="close" data-dismiss="alert">
 								<span aria-hidden="true">&times;</span>
@@ -115,11 +116,13 @@
 							</div>
 						</div>
 					</form:form>
-					
-			</div>	
-			<!--End Content-->
+					</div>
+				
+			
 		</div>
+		<!--End Content-->
 	</div>
 
+	
 	
 <%@ include file="footer.jsp" %>
