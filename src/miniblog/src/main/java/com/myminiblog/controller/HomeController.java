@@ -2,6 +2,7 @@ package com.myminiblog.controller;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -59,6 +60,9 @@ public class HomeController {
     public void setBlogService(BlogService bs){
         this.blogService = bs;
     }
+    
+    @Value("${avatar_size_limit}")
+    private long limit_avatar;
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -123,7 +127,7 @@ public class HomeController {
         }else{
         	
         	if(!user.getImage().equals(image.getOriginalFilename())){
-        		if(image.getSize()<5000000){
+        		if(image.getSize()<limit_avatar){
         		try {
             	
             		String nameImageNew = user.getUsername() +image.getOriginalFilename();
@@ -136,7 +140,7 @@ public class HomeController {
             		return "updateUserInfo";
             	}
         		}else{
-        			model.addAttribute("error","Size of image should < 5000000 byte");
+        			model.addAttribute("error","Size of image should < "+limit_avatar+" byte");
             		return "updateUserInfo";
         		}
            		
@@ -186,7 +190,7 @@ public class HomeController {
     @RequestMapping("/edit/{username}")
     public String editUser(@PathVariable("username") String username, Model model,HttpServletRequest request){
     	User user = this.userService.findByUserName(username);
-
+	model.addAttribute("limit_avatar", limit_avatar );
         model.addAttribute("userinfo", user );
         return "updateUserInfo";
     }

@@ -50,9 +50,7 @@
 						<div class="container-fluid blue-border">
 							<div class="col-md-6 col-md-offset-1" style="margin-top:10px">
 								<div class="form-group">
-								
-								
-            					
+            					<input id="limit_avatar" type="hidden" value="${limit_avatar}"/>
             					<form:hidden path="username" />
         						<form:hidden path="password" />
 								

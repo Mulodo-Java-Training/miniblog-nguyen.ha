@@ -26,7 +26,8 @@
 				
 				reader.readAsDataURL(input.files[0]);
 		    }else{
-		    	alert("Image size should be less than 5000000 byte");
+		    	var limit_avatar = document.getElementById("limit_avatar").value;
+		    	alert("Image size should be less than "+limit_avatar+ " byte");
 		    }
 			
 		}
@@ -73,7 +74,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">My Account<span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="${pageContext.request.contextPath}/edit/${sessionScope.user_loged_in}">Update Info</a></li>
-								<li><a href="change-password.html">Change Password</a></li>
+								<li><a href="${pageContext.request.contextPath}/changepassword">Change Password</a></li>
 								<li><a href="manage-post.html">Manage Post</a></li>
 								<li><a href="${pageContext.request.contextPath}/logout">Log out</a></li>
 							</ul>
