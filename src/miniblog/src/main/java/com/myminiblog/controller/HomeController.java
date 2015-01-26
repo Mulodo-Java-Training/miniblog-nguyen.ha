@@ -194,4 +194,46 @@ public class HomeController {
         model.addAttribute("userinfo", user );
         return "updateUserInfo";
     }
+    @RequestMapping(value= "/changepassword", method = RequestMethod.GET)
+    public String changePassword(Model model,HttpServletRequest request){
+        return "changePassword";
+    }
+    @RequestMapping(value= "/changepassword", method = RequestMethod.POST)
+    public String changePassword(@RequestParam("currentpassword") String currentpassword,@RequestParam("newpassword") String newpassword, Model model,HttpServletRequest request){
+    	
+    	logger.info("current_password  "+request.getParameter("currentpassword"));
+    	String current_password = request.getParameter("currentpassword");
+		String newpass = request.getParameter("newpassword");
+		String re_newpass = request.getParameter("retypepassword");
+		String error = "false";
+    	if(!(current_password.isEmpty()||(newpass.isEmpty())||(re_newpass.isEmpty())))
+		{
+    	String username = (String)request.getSession().getAttribute("user_loged_in");
+    	User user = this.userService.findByUserName(username);
+    	
+    		if (user!=null){
+    			logger.info("re_newpass  "+re_newpass);
+    			if(newpass.equals(re_newpass)){
+    				if (current_password.equals(user.getPassword())){
+        				
+        				user.setPassword(newpass);
+        				this.userService.updateUser(user);
+        			}else{
+        				error = "Current password is not correct";
+        			}
+    			}else{
+    				error = "Retype password is not match";
+    			}
+    			
+    		
+	    	}else{
+	    		error = "user not exist";
+	    	}
+		}else{
+			error = "All input must be filled";
+		}
+    	model.addAttribute("error", error );
+        return "changePassword";
+    }
+    
 }
