@@ -1,17 +1,23 @@
 package com.myminiblog.controller;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -20,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.myminiblog.spring.service.UserService;
@@ -33,6 +40,14 @@ import com.myminiblog.model.Blog;
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	
+	private ServletContext servletContext;
+	@Autowired(required=true)
+	@Qualifier(value="servletContext")
+	public void setServletContext(ServletContext servletContext) {
+	this.servletContext = servletContext;
+	 
+	}
 	private UserService userService;
 	private BlogService blogService;
     @Autowired(required=true)
@@ -45,6 +60,9 @@ public class HomeController {
     public void setBlogService(BlogService bs){
         this.blogService = bs;
     }
+    
+    @Value("${avatar_size_limit}")
+    private long limit_avatar;
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -98,14 +116,37 @@ public class HomeController {
      
     //For add and update person both
     @RequestMapping(value= "/user/add", method = RequestMethod.POST)
-    public String addUser(@ModelAttribute("userinfo") User p,Model model){
-         
+    public String addUser(@ModelAttribute("userinfo") User p,Model model,@RequestParam(value = "imagelink", required = false) MultipartFile image,HttpServletRequest request){
+        
+    	
     	String username = p.getUsername();
     	User user = this.userService.findByUserName(username);
         if(user ==null){
             //new person, add it
             this.userService.addUser(p);
         }else{
+        	
+        	if(!user.getImage().equals(image.getOriginalFilename())){
+        		if(image.getSize()<limit_avatar){
+        		try {
+            	
+            		String nameImageNew = user.getUsername() +image.getOriginalFilename();
+            		
+            		saveImage(nameImageNew, image);
+            		user.setImage(nameImageNew);
+            	} catch (IOException e) {
+//            		bindingResult.reject(e.getMessage());
+            		model.addAttribute("error","true");
+            		return "updateUserInfo";
+            	}
+        		}else{
+        			model.addAttribute("error","Size of image should < "+limit_avatar+" byte");
+            		return "updateUserInfo";
+        		}
+           		
+        	}
+        	
+        	
             //existing person, call update
         	user.setAddress(p.getAddress());
         	user.setEmail(p.getEmail());
@@ -113,13 +154,32 @@ public class HomeController {
         	user.setLastname(p.getLastname());
             this.userService.updateUser(user);
             model.addAttribute("userinfo",user);
-            model.addAttribute("error","fasle");
+            model.addAttribute("error","false");
         }
          
         return "updateUserInfo";
          
     }
-     
+    private void saveImage(String filename, MultipartFile image)
+    		throws RuntimeException, IOException {
+		try {
+			logger.info("function  ");
+			String webappRoot = servletContext.getRealPath("/");
+		    String relativeFolder = "/resources/avatar/" ;
+		    String realPath = webappRoot + relativeFolder
+		                       + filename;
+//			String realPath = servletContext.getRealPath(filename);
+		File file = new File(realPath);
+		logger.info("saveImage  "+file.getAbsolutePath());
+		logger.info("realPath  "+realPath);
+		FileUtils.writeByteArrayToFile(file, image.getBytes());
+		System.out.println("Go to the location:  " + file.toString()
+		+ " on your computer and verify that the image has been stored.");
+		} catch (IOException e) {
+		throw e;
+		}
+    }
+
     @RequestMapping("/remove/{id}")
     public String removeUser(@PathVariable("id") int id){
          
@@ -128,8 +188,10 @@ public class HomeController {
     }
   
     @RequestMapping("/edit/{username}")
-    public String editUser(@PathVariable("username") String username, Model model){
-        model.addAttribute("userinfo", this.userService.findByUserName(username) );
+    public String editUser(@PathVariable("username") String username, Model model,HttpServletRequest request){
+    	User user = this.userService.findByUserName(username);
+	model.addAttribute("limit_avatar", limit_avatar );
+        model.addAttribute("userinfo", user );
         return "updateUserInfo";
     }
 }
