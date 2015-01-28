@@ -47,7 +47,47 @@ public class UserDaoImpl implements UserDao {
         }
         return usersList;
     }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<User> getListUserByName (String name,int limit , int pos){
+    	String nameSearch = name.toLowerCase();
+    	Session session = this.sessionFactory.getCurrentSession();
+    	logger.info("List getListUserByName "+name);
+    	System.out.println("List getListUserByName "+name);
+    	List<User> usersList = new ArrayList<User>();
+        
+    	usersList = session
+			.createQuery("from User where username like ? or firstname = ? or lastname = ? ")
+			.setParameter(0, "%"+nameSearch+"%")
+			.setParameter(1, nameSearch)
+			.setParameter(2, nameSearch)
+			.setFirstResult(pos)
+    		.setMaxResults(limit)
+			.list();
+    	logger.info("list count "+usersList.size());
+    	System.out.println("list count "+usersList.size());
+        return usersList;
+    }
  
+    @SuppressWarnings("unchecked")
+    @Override
+    public int countListUserByName (String name){
+    	String nameSearch = name.toLowerCase();
+    	Session session = this.sessionFactory.getCurrentSession();
+    	
+    	
+        
+    	Long result =(Long) session
+			.createQuery("select count(*) from User where username like ? or firstname = ? or lastname = ?")
+			.setParameter(0, "%"+nameSearch+"%")
+			.setParameter(1, nameSearch)
+			.setParameter(2, nameSearch)
+    		.uniqueResult();
+    	
+        return result.intValue();
+    }
+    
     @Override
     public User getUserById(int id) {
         Session session = this.sessionFactory.getCurrentSession();      

@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
+
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
@@ -235,5 +237,33 @@ public class HomeController {
     	model.addAttribute("error", error );
         return "changePassword";
     }
-    
+    @RequestMapping("/searchUser")
+    public String searchUser(@RequestParam("nameUser") String nameUser,Model model,HttpServletRequest request){
+    	String name = request.getParameter("nameUser");
+    	
+    	int numpage = 1;
+        int recordsPerPage = 3;
+        if(request.getParameter("page") != null)
+        	numpage = Integer.parseInt(request.getParameter("page"));
+       
+    	
+        
+        List<User> list = this.userService.getListUserByName(name,recordsPerPage,(numpage-1)*recordsPerPage);
+        
+        
+        //paging
+        int noOfRecords = this.userService.countListUserByName(name);
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+
+        
+        request.setAttribute("currentPage", numpage);
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("noOfRecords", noOfRecords);
+        model.addAttribute("listUsers", list);
+        model.addAttribute("nameSearch", name);
+        return "searchUser";
+        
+        
+        
+    }
 }

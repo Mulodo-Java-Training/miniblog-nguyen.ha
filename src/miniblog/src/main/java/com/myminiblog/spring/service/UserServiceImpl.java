@@ -31,9 +31,23 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public List<User> listUsers() {
+    	
         return this.userDAO.listUsers();
     }
- 
+    
+    @Override
+    @Transactional
+    public List<User> getListUserByName (String name,int limit , int pos){
+    	System.out.println("service getListUserByName "+name);
+    	return this.userDAO.getListUserByName(name,limit,pos);
+    }
+    
+    @Override
+    @Transactional
+    public int countListUserByName (String name){
+    	return this.userDAO.countListUserByName(name);
+    }
+    
     @Override
     @Transactional
     public User getUserById(int id) {
