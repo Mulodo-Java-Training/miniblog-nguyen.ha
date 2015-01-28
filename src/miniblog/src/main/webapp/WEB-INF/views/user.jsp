@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page import="com.myminiblog.util.DateUtil"%>
 <div class="col-md-4">
   	<div class="col-md-5">
   		 
@@ -14,13 +15,13 @@
 		</c:if>
 	</div>
 	<div class="col-md-7">
-		<% long timestamp =Long.parseLong(request.getParameter("created_at")); //Example -> in ms
-		System.out.println(timestamp); 
-		java.util.Date date = new java.util.Date(timestamp);
-		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+		<% 
+		DateUtil formatDate = new DateUtil();
+		String dateStr = formatDate.convertStringTimestampToStringDate(request.getParameter("created_at"), "dd/MM/yyyy");
+		
 		%>
 		<div class="title">${param.username}</div>
-		<div class="date"> Date join: <%= sdf.format(date) %>
+		<div class="date"> Date join: <%= dateStr %>
 		</div>
 		<div>Firstname: ${param.firstname}</div>
 		<div>Lastname: ${param.lastname}</div>

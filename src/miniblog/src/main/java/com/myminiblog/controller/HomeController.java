@@ -65,13 +65,18 @@ public class HomeController {
     
     @Value("${avatar_size_limit}")
     private long limit_avatar;
+    @Value("${search_user_no_records_per_page}")
+    private int recordsPerPage;
+    
+    
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-//		model.addAttribute("listUsers", this.userService.listUsers());
+		
+
+//	  	logger.info("Welcome home! The client locale is ."+ sdf.format(date));
 		 model.addAttribute("listTopBlogs", this.blogService.listTopBlogs());
 		return "home";
 	}
@@ -242,7 +247,7 @@ public class HomeController {
     	String name = request.getParameter("nameUser");
     	
     	int numpage = 1;
-        int recordsPerPage = 3;
+        
         if(request.getParameter("page") != null)
         	numpage = Integer.parseInt(request.getParameter("page"));
        
