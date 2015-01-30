@@ -1,3 +1,4 @@
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -46,22 +47,22 @@
 					<a class="logo" href="${pageContext.request.contextPath}/">Mini Blog</a>
 				</div>
 				<div class="col-md-5" style="margin-top: 8px;">
-					<form role="form" action="searchUser.html">
+					<form:form role="form" action="${pageContext.request.contextPath}/searchUser">
 						
 					<div class="input-group">
-						<input name="word" class="form-control txtSearch"  placeholder="Firstname, Lastname, Username" type="text">
+						<input name="nameUser" class="form-control txtSearch"  placeholder="Firstname, Lastname, Username" type="text">
 						<span class="input-group-btn">
 							<input class="btn btn-primary" value="Search" type="submit">
 						</span>
 		
 					</div><!-- /input-group -->
 			
-					</form>
+					</form:form>
 				</div>
 				<div id="navbar" class="navbar-collapse collapse col-md-4">
 	
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="list-all-posts.html">Blog</a></li>
+						<li><a href="${pageContext.request.contextPath}/blog">Blog</a></li>
 						<c:choose>
    						<c:when test="${empty sessionScope.user_loged_in}" >
    							<%  %>
@@ -75,7 +76,7 @@
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="${pageContext.request.contextPath}/edit/${sessionScope.user_loged_in}">Update Info</a></li>
 								<li><a href="${pageContext.request.contextPath}/changepassword">Change Password</a></li>
-								<li><a href="manage-post.html">Manage Post</a></li>
+								<li><a href="${pageContext.request.contextPath}/blog">Manage Post</a></li>
 								<li><a href="${pageContext.request.contextPath}/logout">Log out</a></li>
 							</ul>
 						</li>

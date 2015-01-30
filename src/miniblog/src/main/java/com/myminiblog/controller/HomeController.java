@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
+
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
@@ -63,13 +65,18 @@ public class HomeController {
     
     @Value("${avatar_size_limit}")
     private long limit_avatar;
+    @Value("${search_user_no_records_per_page}")
+    private int recordsPerPage;
+    
+    
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-//		model.addAttribute("listUsers", this.userService.listUsers());
+		
+
+//	  	logger.info("Welcome home! The client locale is ."+ sdf.format(date));
 		 model.addAttribute("listTopBlogs", this.blogService.listTopBlogs());
 		return "home";
 	}
@@ -235,5 +242,33 @@ public class HomeController {
     	model.addAttribute("error", error );
         return "changePassword";
     }
-    
+    @RequestMapping("/searchUser")
+    public String searchUser(@RequestParam("nameUser") String nameUser,Model model,HttpServletRequest request){
+    	String name = request.getParameter("nameUser");
+    	
+    	int numpage = 1;
+        
+        if(request.getParameter("page") != null)
+        	numpage = Integer.parseInt(request.getParameter("page"));
+       
+    	
+        
+        List<User> list = this.userService.getListUserByName(name,recordsPerPage,(numpage-1)*recordsPerPage);
+        
+        
+        //paging
+        int noOfRecords = this.userService.countListUserByName(name);
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+
+        
+        request.setAttribute("currentPage", numpage);
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("noOfRecords", noOfRecords);
+        model.addAttribute("listUsers", list);
+        model.addAttribute("nameSearch", name);
+        return "searchUser";
+        
+        
+        
+    }
 }

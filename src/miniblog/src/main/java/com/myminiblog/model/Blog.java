@@ -27,9 +27,9 @@ public class Blog {
 	@Column (nullable=false, name="status")
     private int status;
 	@Column (nullable=false, name="created_at")
-    private int created_at;
+    private long created_at;
 	@Column (nullable=false, name="updated_at")
-    private int updated_at;
+    private long updated_at;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author")
@@ -82,14 +82,14 @@ public class Blog {
     public void setStatus(int _status) {
         this.status = _status;
     }
-    public int getCreated_at() {
+    public long getCreated_at() {
         return created_at;
     }
  
     public void setCreated_at(int _created_at) {
         this.created_at = _created_at;
     }
-    public int getUpdated_at() {
+    public long getUpdated_at() {
         return updated_at;
     }
  
